@@ -17,11 +17,27 @@ function convertMediawikiToMarkdown() {
 	var mediawikiEl = document.getElementById('input-mediawiki');
 	var contertedText = mediawikiEl.value;
 
+	//Remove interlanguage link such as [[en:Title]], [[zh-cn:Title]]
+	contertedText = contertedText.replace(/\[\[([^:]*?):([^:]*?)\]\]\n/g, function(matched, str1, str2)
+        {
+            if (str1 == "Wikipedia")
+                return matched;
+            else
+                return "";
+        }
+	);
+
     // convert "==Heading 2==" to "# Heading 2" etc.
 	contertedText = contertedText.replace(/=====\s*(.*)\s*=====/g, "#### $1\n\n");
 	contertedText = contertedText.replace(/====\s*(.*)\s*====/g, "### $1\n\n");
     contertedText = contertedText.replace(/===\s*(.*)\s*===/g, "## $1");
     contertedText = contertedText.replace(/==\s*(.*)\s*==/g, "# $1");
+
+    // convert [[The page|Page text]] to {{Link|Page text}}(The page)
+    contertedText = contertedText.replace(/\[\[([^\|]*)\|([^\|]*)\]\]/g, "{{Link|$2}}($1)");
+
+    // convert [[The page]] to {{Link|Page text}}(The page)
+    contertedText = contertedText.replace(/\[\[([^\|]*)\]\]/g, "{{Link|$1}}($1)");
 
 	// convert
 	// "[http://coding.smashingmagazine.com/2012/04/20/decoupling-html-from-css/ Decoupling HTML From CSS]"
@@ -32,7 +48,6 @@ function convertMediawikiToMarkdown() {
 
     // convert '**' into '    *'
 	contertedText = contertedText.replace(/\*\*/g, "    *");
-
 
 	// show the converted text
 	var markdownEl = document.getElementById('result-markdown');
