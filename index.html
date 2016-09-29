@@ -23,7 +23,6 @@ function cleanUpElement(contertedText){
                 return "";
         }
 	);
-	
 	contertedText = contertedText.replace(/\{\{Related(.*?)\}\}\n/gi, "");
 	contertedText = contertedText.replace(/\{\{Translation(.*?)\}\}\n/gi, "");
 	return contertedText;
@@ -43,10 +42,10 @@ function convertMediawikiToMarkdown() {
     contertedText = contertedText.replace(/==\s*(.*)\s*==/g, "# $1");
 
     // convert [[The page|Page text]] to {{Link|Page text}}(The page)
-    contertedText = contertedText.replace(/\[\[([^\|]*)\|([^\|]*)\]\]/g, "{{Link|$2}}($1)");
+    contertedText = contertedText.replace(/\[\[([^\|]*)\|([^\|]*)\]\]/g, "{{InternalLink|$2}}($1)");
 
     // convert [[The page]] to {{Link|Page text}}(The page)
-    contertedText = contertedText.replace(/\[\[([^\|]*)\]\]/g, "{{Link|$1}}($1)");
+    contertedText = contertedText.replace(/\[\[([^\|]*)\]\]/g, "{{InternalLink|$1}}($1)");
 
 	// convert
 	// "[http://coding.smashingmagazine.com/2012/04/20/decoupling-html-from-css/ Decoupling HTML From CSS]"
@@ -54,6 +53,8 @@ function convertMediawikiToMarkdown() {
 	// "[Decoupling HTML From CSS](http://coding.smashingmagazine.com/2012/04/20/decoupling-html-from-css/)"
     // '[^\s]*' matches the URL, '([^\]]*)' machtes everything else till the first closing brakcet ']'
 	contertedText = contertedText.replace(/\[([^\s]*)\s([^\]]*)\]/g, "[$2]($1)");
+
+	contertedText = contertedText.replace(/\{\{InternalLink\|(.*?)\}\}/g, "[$1]");
 
     // convert '**' into '    *'
 	contertedText = contertedText.replace(/\*\*/g, "    *");
