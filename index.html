@@ -12,20 +12,29 @@
 <script type="text/javascript">
 <!--
 
-function convertMediawikiToMarkdown() {
-
-	var mediawikiEl = document.getElementById('input-mediawiki');
-	var contertedText = mediawikiEl.value;
-
-	//Remove interlanguage link such as [[en:Title]], [[zh-cn:Title]]
+//Remove interlanguage link such as [[en:Title]], [[zh-cn:Title]]
+function cleanUpElement(contertedText){
 	contertedText = contertedText.replace(/\[\[([^:]*?):([^:]*?)\]\]\n/g, function(matched, str1, str2)
         {
+            // Keep [[Wikipedia:XXX]]
             if (str1 == "Wikipedia")
                 return matched;
             else
                 return "";
         }
 	);
+	
+	contertedText = contertedText.replace(/\{\{Related(.*?)\}\}\n/gi, "");
+	contertedText = contertedText.replace(/\{\{Translation(.*?)\}\}\n/gi, "");
+	return contertedText;
+}
+
+function convertMediawikiToMarkdown() {
+
+	var mediawikiEl = document.getElementById('input-mediawiki');
+	var contertedText = mediawikiEl.value;
+
+    contertedText = cleanUpElement(contertedText);
 
     // convert "==Heading 2==" to "# Heading 2" etc.
 	contertedText = contertedText.replace(/=====\s*(.*)\s*=====/g, "#### $1\n\n");
