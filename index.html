@@ -56,9 +56,19 @@ function convertMediawikiToMarkdown() {
 
 	contertedText = contertedText.replace(/\{\{InternalLink\|(.*?)\}\}/g, "[$1]");
 
-    // convert '**' into '    *'
-	contertedText = contertedText.replace(/\*\*/g, "    *");
+	//convert Wikipedia link.
+    contertedText = contertedText.replace(/\(Wikipedia:([^:]*?)\)/g, function(matched, str1){
+            str1 = str1.replace(/\s/g, "_");
+            return '(https://en.wikipedia.org/wiki/' + str1 + ')';
+        }
+    );
+    
+    // convert '{{Grp|AAA}}' into link
+	contertedText = contertedText.replace(/\{\{Grp\|(.*?)\}\}/g, "[$1](https://www.archlinux.org/groups/x86_64/$1)");
 
+	// convert '**' into '    *'
+	contertedText = contertedText.replace(/\*\*/g, "    *");
+	
 	// show the converted text
 	var markdownEl = document.getElementById('result-markdown');
 	markdownEl.value = contertedText;
