@@ -92,6 +92,15 @@ function convertMediawikiToMarkdown() {
     // Change {{Note|...}} into quote.
     contertedText = contertedText.replace(/\{\{Note\|(.*?)\}\}/g, "> $1");
 
+    // Change {{注意|...}} into quote.
+    contertedText = contertedText.replace(/\{\{注意\|(.*?)\}\}/g, "> $1");
+    
+    // {{ic|code}} into `code`.
+    contertedText = contertedText.replace(/\{\{ic\|(.*?)\}\}/gi, "`$1`");
+    
+    // {{ic|bc}} into ```code```.
+    contertedText = contertedText.replace(/\{\{bc\|([\s\S]*?)\}\}/gim, "```\n$1\n```");
+    
     // {{App|...}} into list.
     contertedText = contertedText.replace(/\{\{App\|(.*?)\|(.*?)\|(.*?)\|(.*?)\}\}/g, "$1 - $2\n    * 主页: $3\n    * 软件包: $4");
     
