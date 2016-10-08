@@ -29,6 +29,34 @@ function cleanUpElement(contertedText){
     return contertedText;
 }
 
+function archwikiHandler(contertedText) {
+    // convert '{{Grp|AAA}}' into link
+    contertedText = contertedText.replace(/\{\{grp\|(.*?)\}\}/gi, "[$1](https://www.archlinux.org/groups/x86_64/$1)");
+    
+    // convert '{{Pkg|AAA}}' into link
+    contertedText = contertedText.replace(/\{\{pkg\|(.*?)\}\}/gi, "[$1](https://www.archlinux.org/packages/?name=$1)");
+    
+    // convert '{{AUR|AAA}}' into link
+    contertedText = contertedText.replace(/\{\{aur\|(.*?)\}\}/gi, "[$1](https://aur.archlinux.org/packages/$1) ([AUR](AUR.md))");
+    
+    // Change {{Note|...}} into quote.
+    contertedText = contertedText.replace(/\{\{Note\|(.*?)\}\}/g, "> $1");
+
+    // Change {{注意|...}} into quote.
+    contertedText = contertedText.replace(/\{\{注意\|(.*?)\}\}/g, "> $1");
+    
+    // {{ic|code}} into `code`.
+    contertedText = contertedText.replace(/\{\{ic\|(.*?)\}\}/gi, "`$1`");
+    
+    // {{ic|bc}} into ```code```.
+    contertedText = contertedText.replace(/\{\{bc\|([\s\S]*?)\}\}/gim, "```\n$1\n```");
+    
+    // {{App|...}} into list.
+    contertedText = contertedText.replace(/\{\{App\|(.*?)\|(.*?)\|(.*?)\|(.*?)\}\}/g, "$1 - $2\n    * 主页: $3\n    * 软件包: $4");
+    
+    return contertedText;
+}
+
 function convertMediawikiToMarkdown() {
 
     var mediawikiEl = document.getElementById('input-mediawiki');
@@ -74,12 +102,6 @@ function convertMediawikiToMarkdown() {
         }
     );
     
-    // convert '{{Grp|AAA}}' into link
-    contertedText = contertedText.replace(/\{\{grp\|(.*?)\}\}/gi, "[$1](https://www.archlinux.org/groups/x86_64/$1)");
-    
-    // convert '{{Pkg|AAA}}' into link
-    contertedText = contertedText.replace(/\{\{pkg\|(.*?)\}\}/gi, "[$1](https://www.archlinux.org/packages/?name=$1)");
-    
     // convert '**' into '    *'
     contertedText = contertedText.replace(/\*\*/g, "    *");
     
@@ -89,20 +111,7 @@ function convertMediawikiToMarkdown() {
     // convert '' into __
     contertedText = contertedText.replace(/''/g, "__");
     
-    // Change {{Note|...}} into quote.
-    contertedText = contertedText.replace(/\{\{Note\|(.*?)\}\}/g, "> $1");
-
-    // Change {{注意|...}} into quote.
-    contertedText = contertedText.replace(/\{\{注意\|(.*?)\}\}/g, "> $1");
-    
-    // {{ic|code}} into `code`.
-    contertedText = contertedText.replace(/\{\{ic\|(.*?)\}\}/gi, "`$1`");
-    
-    // {{ic|bc}} into ```code```.
-    contertedText = contertedText.replace(/\{\{bc\|([\s\S]*?)\}\}/gim, "```\n$1\n```");
-    
-    // {{App|...}} into list.
-    contertedText = contertedText.replace(/\{\{App\|(.*?)\|(.*?)\|(.*?)\|(.*?)\}\}/g, "$1 - $2\n    * 主页: $3\n    * 软件包: $4");
+    contertedText = archwikiHandler(contertedText);
     
     // show the converted text
     var markdownEl = document.getElementById('result-markdown');
