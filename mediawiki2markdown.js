@@ -1,3 +1,7 @@
+// Inner items should be converted first. 
+// For example, {{ic|}} should be converted earlyer than {{Note|}}
+
+
 //Remove interlanguage link such as [[en:Title]], [[zh-cn:Title]]
 function cleanUpElement(contertedText){
     contertedText = contertedText.replace(/\[\[([^:]*?):([^:]*?)\]\]\n/g, function(matched, str1, str2) {
@@ -23,12 +27,6 @@ function archwikiHandler(contertedText) {
     // convert '{{AUR|AAA}}' into link
     contertedText = contertedText.replace(/\{\{aur\|(.*?)\}\}/gi, "[$1](https://aur.archlinux.org/packages/$1) ([AUR](AUR.md))");
     
-    // Change {{Note|...}} into quote.
-    contertedText = contertedText.replace(/\{\{Note\|(.*?)\}\}/g, "> $1");
-
-    // Change {{注意|...}} into quote.
-    contertedText = contertedText.replace(/\{\{注意\|(.*?)\}\}/g, "> $1");
-    
     // {{ic|code}} into `code`.
     contertedText = contertedText.replace(/\{\{ic\|(.*?)\}\}/gi, "`$1`");
     
@@ -37,6 +35,18 @@ function archwikiHandler(contertedText) {
     
     // {{App|...}} into list.
     contertedText = contertedText.replace(/\{\{App\|(.*?)\|(.*?)\|(.*?)\|(.*?)\}\}/g, "$1 - $2\n    * 主页: $3\n    * 软件包: $4");
+    
+    // Change {{Note|...}} into quote.
+    contertedText = contertedText.replace(/\{\{Note\|(.*?)\}\}/g, "> $1");
+
+    // Change {{注意|...}} into quote.
+    contertedText = contertedText.replace(/\{\{注意\|(.*?)\}\}/g, "> $1");
+
+    contertedText = contertedText.replace(/\&\#61\;/gi, "=");
+    
+    contertedText = contertedText.replace(/<nowiki>/gi, "");
+    
+    contertedText = contertedText.replace(/<\/nowiki>/gi, "");
     
     return contertedText;
 }
@@ -75,8 +85,10 @@ function convertMediawikiToMarkdown() {
     // to
     // "[Decoupling HTML From CSS](http://coding.smashingmagazine.com/2012/04/20/decoupling-html-from-css/)"
     // '[^\s]*' matches the URL, '([^\]]*)' machtes everything else till the first closing brakcet ']'
-    contertedText = contertedText.replace(/\[([^\s]*)\s([^\]]*)\]/g, "[$2]($1)");
+    contertedText = contertedText.replace(/\[([^\s]*?)\s([^\]]*?)\]/g, "[$2]($1)");
 
+    contertedText = contertedText.replace(/\[([^\s]*?)\]/g, "[\\*]($1)");
+    
     contertedText = contertedText.replace(/\{\{InternalLink\|(.*?)\}\}/g, "[$1]");
 
     //convert Wikipedia link.
