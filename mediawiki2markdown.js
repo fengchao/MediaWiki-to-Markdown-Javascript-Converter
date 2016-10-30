@@ -3,7 +3,7 @@
 
 
 //Remove interlanguage link such as [[en:Title]], [[zh-cn:Title]]
-function cleanUpElement(contertedText){
+var cleanUpElement = function cleanUpElement(contertedText){
     contertedText = contertedText.replace(/\[\[([^:]*?):([^:]*?)\]\]\n/g, function(matched, str1, str2) {
             // Keep [[Wikipedia:XXX]]
             if (str1 == "Wikipedia")
@@ -17,15 +17,15 @@ function cleanUpElement(contertedText){
     return contertedText;
 }
 
-function archwikiHandler(contertedText) {
+var archwikiHandler = function archwikiHandler(contertedText) {
     // convert '{{Grp|AAA}}' into link
-    contertedText = contertedText.replace(/\{\{grp\|(.*?)\}\}/gi, "[$1](https://www.archlinux.org/groups/x86_64/$1)");
+    contertedText = contertedText.replace(/\{\{grp\|(.*?)\}\}/gi, "{{LinkText+$1}}(https://www.archlinux.org/groups/x86_64/$1)");
     
     // convert '{{Pkg|AAA}}' into link
-    contertedText = contertedText.replace(/\{\{pkg\|(.*?)\}\}/gi, "[$1](https://www.archlinux.org/packages/?name=$1)");
+    contertedText = contertedText.replace(/\{\{pkg\|(.*?)\}\}/gi, "{{LinkText+$1}}(https://www.archlinux.org/packages/?name=$1)");
     
     // convert '{{AUR|AAA}}' into link
-    contertedText = contertedText.replace(/\{\{aur\|(.*?)\}\}/gi, "[$1](https://aur.archlinux.org/packages/$1) ([AUR](AUR.md))");
+    contertedText = contertedText.replace(/\{\{aur\|(.*?)\}\}/gi, "{{LinkText+$1}}(https://aur.archlinux.org/packages/$1) ({{LinkText+AUR}}(AUR.md))");
     
     // {{ic|code}} into `code`.
     contertedText = contertedText.replace(/\{\{ic\|(.*?)\}\}/gi, "`$1`");
@@ -51,7 +51,7 @@ function archwikiHandler(contertedText) {
     return contertedText;
 }
 
-function convertMediawikiToMarkdown() {
+var convertMediawikiToMarkdown = function convertMediawikiToMarkdown() {
 
     var mediawikiEl = document.getElementById('input-mediawiki');
     var contertedText = mediawikiEl.value;
@@ -65,31 +65,33 @@ function convertMediawikiToMarkdown() {
     contertedText = contertedText.replace(/===\s*(.*)\s*===/g, "### $1");
     contertedText = contertedText.replace(/==\s*(.*)\s*==/g, "## $1");
 
+    contertedText = archwikiHandler(contertedText);
     
     // convert [[The page|Page text]] to {{Link|Page text}}(The page)
     contertedText = contertedText.replace(/\[\[([^\|]*?)\|([^\|]*?)\]\]/g, function(matched, str1, str2) {
             str1 = str1.replace(/\s*\(简体中文\)\s*/g, "");
-            return "{{InternalLink|" + str2 + "}}(" + str1 + ")";    
+            return "{{LinkText+" + str2 + "}}(" + str1 + ")";    
         }
     );
 
     // convert [[The page]] to {{Link|Page text}}(The page)
     contertedText = contertedText.replace(/\[\[([^\|]*?)\]\]/g, function(matched, str1) {
             str1 = str1.replace(/\s*\(简体中文\)\s*/g, "");
-            return "{{InternalLink|" + str1 + "}}(" + str1 + ")";    
+            return "{{LinkText+" + str1 + "}}(" + str1 + ")";    
         }
     );
+    
+    // convert [the_url] to {{LinkText+*}}
+    contertedText = contertedText.replace(/\[([^\s]*?)\]/g, "{{LinkText+\\*}}($1)");
                                           
     // convert
     // "[http://coding.smashingmagazine.com/2012/04/20/decoupling-html-from-css/ Decoupling HTML From CSS]"
     // to
     // "[Decoupling HTML From CSS](http://coding.smashingmagazine.com/2012/04/20/decoupling-html-from-css/)"
     // '[^\s]*' matches the URL, '([^\]]*)' machtes everything else till the first closing brakcet ']'
-    contertedText = contertedText.replace(/\[([^\s]*?)\s([^\]]*?)\]/g, "[$2]($1)");
-
-    contertedText = contertedText.replace(/\[([^\s]*?)\]/g, "[\\*]($1)");
+    contertedText = contertedText.replace(/\[([^\s]*?)\s([^\]]*?)\]/g, "{{LinkText+$2}}($1)");
     
-    contertedText = contertedText.replace(/\{\{InternalLink\|(.*?)\}\}/g, "[$1]");
+    contertedText = contertedText.replace(/\{\{LinkText\+(.*?)\}\}/g, "[$1]");
 
     //convert Wikipedia link.
     contertedText = contertedText.replace(/\(Wikipedia:([^:]*?)\)/g, function(matched, str1){
@@ -106,8 +108,6 @@ function convertMediawikiToMarkdown() {
     
     // convert '' into __
     contertedText = contertedText.replace(/''/g, "__");
-    
-    contertedText = archwikiHandler(contertedText);
     
     // show the converted text
     var markdownEl = document.getElementById('result-markdown');
