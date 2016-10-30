@@ -34,10 +34,10 @@ var archwikiHandler = function archwikiHandler(contertedText) {
     contertedText = contertedText.replace(/\{\{bc\|([\s\S]*?)\}\}/gim, "```\n$1\n```");
     
     // {{App|...}} into list.
-    contertedText = contertedText.replace(/\{\{App\|(.*?)\|(.*?)\|(.*?)\|(.*?)\}\}/g, "$1 - $2\n    * 主页: $3\n    * 软件包: $4");
+    contertedText = contertedText.replace(/\{\{App\|(.*?)\|(.*?)\|(.*?)\|(.*?)\}\}/gi, "$1 - $2\n    * 主页: $3\n    * 软件包: $4");
     
     // Change {{Note|...}} into quote.
-    contertedText = contertedText.replace(/\{\{Note\|(.*?)\}\}/g, "> $1");
+    contertedText = contertedText.replace(/\{\{Note\|(.*?)\}\}/gi, "> $1");
 
     // Change {{注意|...}} into quote.
     contertedText = contertedText.replace(/\{\{注意\|(.*?)\}\}/g, "> $1");
@@ -94,7 +94,7 @@ var convertMediawikiToMarkdown = function convertMediawikiToMarkdown() {
     contertedText = contertedText.replace(/\{\{LinkText\+(.*?)\}\}/g, "[$1]");
 
     //convert Wikipedia link.
-    contertedText = contertedText.replace(/\(Wikipedia:([^:]*?)\)/g, function(matched, str1){
+    contertedText = contertedText.replace(/\(Wikipedia:([^:]*?)\)/gi, function(matched, str1){
             str1 = str1.replace(/\s/g, "_");
             return '(https://en.wikipedia.org/wiki/' + str1 + ')';
         }
