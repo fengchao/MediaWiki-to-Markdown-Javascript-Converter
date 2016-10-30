@@ -4,7 +4,7 @@
 
 //Remove interlanguage link such as [[en:Title]], [[zh-cn:Title]]
 var cleanUpElement = function cleanUpElement(contertedText){
-    contertedText = contertedText.replace(/\[\[([^:]*?):([^:]*?)\]\]\n/g, function(matched, str1, str2) {
+    contertedText = contertedText.replace(/^\[\[([^:]*?):([^:]*?)\]\]\n/g, function(matched, str1, str2) {
             // Keep [[Wikipedia:XXX]]
             if (str1 == "Wikipedia")
                 return matched;
@@ -70,14 +70,14 @@ var convertMediawikiToMarkdown = function convertMediawikiToMarkdown() {
     // convert [[The page]] to {{Link+The page}}(The page)
     contertedText = contertedText.replace(/\[\[([^\|]*?)\]\]/g, function(matched, str1) {
             str1 = str1.replace(/\s*\(简体中文\)\s*/g, "");
-            return "{{LinkText+" + str1 + "}}(" + str1 + ")";    
+            return "{{LinkText+" + str1 + "}}(" + str1 + ".md)";    
         }
     );
     
     // convert [[The page|Page text]] to {{Link+Page text}}(The page)
     contertedText = contertedText.replace(/\[\[([^\|]*?)\|([^\|]*?)\]\]/g, function(matched, str1, str2) {
             str1 = str1.replace(/\s*\(简体中文\)\s*/g, "");
-            return "{{LinkText+" + str2 + "}}(" + str1 + ")";    
+            return "{{LinkText+" + str2 + "}}(" + str1 + ".md)";    
         }
     );
     
