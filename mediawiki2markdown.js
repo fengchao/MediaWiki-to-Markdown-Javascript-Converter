@@ -57,6 +57,8 @@ var convertMediawikiToMarkdown = function convertMediawikiToMarkdown() {
     var contertedText = mediawikiEl.value;
 
     contertedText = cleanUpElement(contertedText);
+    
+    contertedText = archwikiHandler(contertedText);
 
     // convert "==Heading 2==" to "# Heading 2" etc.
     contertedText = contertedText.replace(/======\s*(.*)\s*======/g, "###### $1");
@@ -64,24 +66,22 @@ var convertMediawikiToMarkdown = function convertMediawikiToMarkdown() {
     contertedText = contertedText.replace(/====\s*(.*)\s*====/g, "#### $1");
     contertedText = contertedText.replace(/===\s*(.*)\s*===/g, "### $1");
     contertedText = contertedText.replace(/==\s*(.*)\s*==/g, "## $1");
-
-    contertedText = archwikiHandler(contertedText);
     
-    // convert [[The page|Page text]] to {{Link|Page text}}(The page)
-    contertedText = contertedText.replace(/\[\[([^\|]*?)\|([^\|]*?)\]\]/g, function(matched, str1, str2) {
-            str1 = str1.replace(/\s*\(简体中文\)\s*/g, "");
-            return "{{LinkText+" + str2 + "}}(" + str1 + ")";    
-        }
-    );
-
-    // convert [[The page]] to {{Link|Page text}}(The page)
+    // convert [[The page]] to {{Link+The page}}(The page)
     contertedText = contertedText.replace(/\[\[([^\|]*?)\]\]/g, function(matched, str1) {
             str1 = str1.replace(/\s*\(简体中文\)\s*/g, "");
             return "{{LinkText+" + str1 + "}}(" + str1 + ")";    
         }
     );
     
-    // convert [the_url] to {{LinkText+*}}
+    // convert [[The page|Page text]] to {{Link+Page text}}(The page)
+    contertedText = contertedText.replace(/\[\[([^\|]*?)\|([^\|]*?)\]\]/g, function(matched, str1, str2) {
+            str1 = str1.replace(/\s*\(简体中文\)\s*/g, "");
+            return "{{LinkText+" + str2 + "}}(" + str1 + ")";    
+        }
+    );
+    
+    // convert [the_url] to {{LinkText+\*}}
     contertedText = contertedText.replace(/\[([^\s]*?)\]/g, "{{LinkText+\\*}}($1)");
                                           
     // convert
