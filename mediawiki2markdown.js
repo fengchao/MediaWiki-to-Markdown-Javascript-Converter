@@ -3,6 +3,8 @@
 
 
 //Remove interlanguage link such as [[en:Title]], [[zh-cn:Title]]
+
+;(function() {
 var cleanUpElement = function cleanUpElement(contertedText){
     contertedText = contertedText.replace(/^\[\[([^:]*?):([^:]*?)\]\]\n/g, function(matched, str1, str2) {
             // Keep [[Wikipedia:XXX]]
@@ -18,6 +20,10 @@ var cleanUpElement = function cleanUpElement(contertedText){
 }
 
 var archwikiHandler = function archwikiHandler(contertedText) {
+    // convert code block
+    contertedText = contertedText.replace(/\n +(.*?)\n/g, "\n```\n$1\n```\n");
+    
+    
     // convert '{{Grp|AAA}}' into link
     contertedText = contertedText.replace(/\{\{grp\|(.*?)\}\}/gi, "{{LinkText+$1}}(https://www.archlinux.org/groups/x86_64/$1)");
     
@@ -113,3 +119,7 @@ var convertMediawikiToMarkdown = function convertMediawikiToMarkdown() {
     var markdownEl = document.getElementById('result-markdown');
     markdownEl.value = contertedText;
 }
+
+document.getElementById("doConvert").onclick = convertMediawikiToMarkdown;
+
+})();
