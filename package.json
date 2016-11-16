@@ -1,0 +1,12 @@
+{
+  "name": "media2markup",
+  "description": "Convert mediawiki to Gitbook markup",
+  "version": "0.2",
+  "dependencies": {
+    "underscore": "1.1.x",
+    "foo": "git+ssh://git@github.com:mixu/foo.git#0.4.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0"
+  }
+}
