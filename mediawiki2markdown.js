@@ -4,6 +4,8 @@
 
 //Remove interlanguage link such as [[en:Title]], [[zh-cn:Title]]
 
+var MediawikiTo2Markdown = {};
+
 ;(function() {
 var cleanUpElement = function cleanUpElement(contertedText){
     contertedText = contertedText.replace(/^\[\[([^:]*?):([^:]*?)\]\]\n/g, function(matched, str1, str2) {
@@ -54,6 +56,15 @@ var archwikiHandler = function archwikiHandler(contertedText) {
     
     contertedText = contertedText.replace(/<\/nowiki>/gi, "");
     
+    return contertedText;
+}
+
+var convertHeader = function convertHeader (contertedText) {
+    contertedText = contertedText.replace(/======\s*(.*)\s*======/g, "###### $1");
+    contertedText = contertedText.replace(/=====\s*(.*)\s*=====/g, "##### $1");
+    contertedText = contertedText.replace(/====\s*(.*)\s*====/g, "#### $1");
+    contertedText = contertedText.replace(/===\s*(.*)\s*===/g, "### $1");
+    contertedText = contertedText.replace(/==\s*(.*)\s*==/g, "## $1");
     return contertedText;
 }
 
@@ -120,6 +131,5 @@ var convertMediawikiToMarkdown = function convertMediawikiToMarkdown() {
     markdownEl.value = contertedText;
 }
 
-document.getElementById("doConvert").onclick = convertMediawikiToMarkdown;
-
+MediawikiTo2Markdown.run = convertMediawikiToMarkdown;
 })();
