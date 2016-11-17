@@ -1,9 +1,12 @@
 window.assert = chai.assert;
 
-describe('Array', function() {
-  describe('#indexOf()', function() {
-    it('should return -1 when the value is not present', function() {
-      assert.equal(-1, [1,2,3].indexOf(4));
+describe('Mediawiki2markdown', function() {
+  describe('#convertHeader()', function() {    
+    it('should convert == Title == to ## Title', function() {
+      var source = "== Title ==";
+      var result = MediawikiTo2Markdown.convertHeader(source);
+      var expectResult = "## Title";
+      assert.deepEqual(result, expectResult);
     });
   });
 }); 

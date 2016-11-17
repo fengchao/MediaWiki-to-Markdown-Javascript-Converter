@@ -60,11 +60,11 @@ var archwikiHandler = function archwikiHandler(contertedText) {
 }
 
 var convertHeader = function convertHeader (contertedText) {
-    contertedText = contertedText.replace(/======\s*(.*)\s*======/g, "###### $1");
-    contertedText = contertedText.replace(/=====\s*(.*)\s*=====/g, "##### $1");
-    contertedText = contertedText.replace(/====\s*(.*)\s*====/g, "#### $1");
-    contertedText = contertedText.replace(/===\s*(.*)\s*===/g, "### $1");
-    contertedText = contertedText.replace(/==\s*(.*)\s*==/g, "## $1");
+    contertedText = contertedText.replace(/======\s*([^\s]*)\s*======/g, "###### $1");
+    contertedText = contertedText.replace(/=====\s*([^\s]*)\s*=====/g, "##### $1");
+    contertedText = contertedText.replace(/====\s*([^\s]*)\s*====/g, "#### $1");
+    contertedText = contertedText.replace(/===\s*([^\s]*)\s*===/g, "### $1");
+    contertedText = contertedText.replace(/==\s*([^\s]*)\s*==/g, "## $1");
     return contertedText;
 }
 
@@ -132,4 +132,5 @@ var convertMediawikiToMarkdown = function convertMediawikiToMarkdown() {
 }
 
 MediawikiTo2Markdown.run = convertMediawikiToMarkdown;
+MediawikiTo2Markdown.convertHeader = convertHeader;
 })();
