@@ -1,5 +1,5 @@
 // Inner items should be converted first. 
-// For example, {{ic|}} should be converted earlyer than {{Note|}}
+// For example, {{ic|}} should be converted earlier than {{Note|}}
 
 
 //Remove interlanguage link such as [[en:Title]], [[zh-cn:Title]]
@@ -59,6 +59,7 @@ var archwikiHandler = function archwikiHandler(contertedText) {
     return contertedText;
 }
 
+/* convert "==Heading 2==" to "# Heading 2" etc. */
 var convertHeader = function convertHeader (contertedText) {
     contertedText = contertedText.replace(/======\s*([^\s]*)\s*======/g, "###### $1");
     contertedText = contertedText.replace(/=====\s*([^\s]*)\s*=====/g, "##### $1");
@@ -77,12 +78,7 @@ var convertMediawikiToMarkdown = function convertMediawikiToMarkdown() {
     
     contertedText = archwikiHandler(contertedText);
 
-    // convert "==Heading 2==" to "# Heading 2" etc.
-    contertedText = contertedText.replace(/======\s*(.*)\s*======/g, "###### $1");
-    contertedText = contertedText.replace(/=====\s*(.*)\s*=====/g, "##### $1");
-    contertedText = contertedText.replace(/====\s*(.*)\s*====/g, "#### $1");
-    contertedText = contertedText.replace(/===\s*(.*)\s*===/g, "### $1");
-    contertedText = contertedText.replace(/==\s*(.*)\s*==/g, "## $1");
+    contertedText = convertHeader(contertedText);
     
     // convert [[The page]] to {{Link+The page}}(The page)
     contertedText = contertedText.replace(/\[\[([^\|]*?)\]\]/g, function(matched, str1) {
