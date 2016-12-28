@@ -48,7 +48,13 @@ var MediawikiTo2Markdown = {};
 
 		// Change {{注意|...}} into quote.
 		contertedText = contertedText.replace(/\{\{注意\|(.*?)\}\}/g, "> $1");
+		
+		// Change {{Tip|...}} into quote.
+		contertedText = contertedText.replace(/\{\{Tip\|(.*?)\}\}/gi, "> $1");
 
+		// Change {{Warning|...}} into quote.
+		contertedText = contertedText.replace(/\{\{Warning\|(.*?)\}\}/gi, "> $1");
+		
 		contertedText = contertedText.replace(/\&\#61\;/gi, "=");
 
 		contertedText = contertedText.replace(/<nowiki>/gi, "");
@@ -59,6 +65,7 @@ var MediawikiTo2Markdown = {};
 	}
 
 	/* convert "==Heading 2==" to "# Heading 2" etc. */
+	/* TODO: Need to support space in heading */
 	var convertHeader = function convertHeader (contertedText) {
 		contertedText = contertedText.replace(/======\s*([^\s]*)\s*======/g, "###### $1");
 		contertedText = contertedText.replace(/=====\s*([^\s]*)\s*=====/g, "##### $1");
