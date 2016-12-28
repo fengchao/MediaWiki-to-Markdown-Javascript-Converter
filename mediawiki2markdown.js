@@ -44,16 +44,19 @@ var MediawikiTo2Markdown = {};
 		contertedText = contertedText.replace(/\{\{App\|(.*?)\|(.*?)\|(.*?)\|(.*?)\}\}/gi, "$1 - $2\n    * 主页: $3\n    * 软件包: $4");
 
 		// Change {{Note|...}} into quote.
-		contertedText = contertedText.replace(/\{\{Note\|(.*?)\}\}/gi, "> $1");
+		contertedText = contertedText.replace(/\{\{Note\|(.*?)\}\}/gi, "$1");
 
 		// Change {{注意|...}} into quote.
-		contertedText = contertedText.replace(/\{\{注意\|(.*?)\}\}/g, "> $1");
+		contertedText = contertedText.replace(/\{\{注意\|(.*?)\}\}/g, "$1");
 		
 		// Change {{Tip|...}} into quote.
-		contertedText = contertedText.replace(/\{\{Tip\|(.*?)\}\}/gi, "> $1");
+		contertedText = contertedText.replace(/\{\{Tip\|(.*?)\}\}/gi, "$1");
 
 		// Change {{Warning|...}} into quote.
-		contertedText = contertedText.replace(/\{\{Warning\|(.*?)\}\}/gi, "> $1");
+		contertedText = contertedText.replace(/\{\{Warning\|(.*?)\}\}/gi, "$1");
+		
+		// Change {{Warning|...}} into quote.
+		contertedText = contertedText.replace(/\{\{警告\|(.*?)\}\}/gi, "$1");
 		
 		contertedText = contertedText.replace(/\&\#61\;/gi, "=");
 
