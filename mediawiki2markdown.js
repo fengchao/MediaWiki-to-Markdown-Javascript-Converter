@@ -109,7 +109,8 @@ var MediawikiTo2Markdown = {};
 		);
 
 		// convert [the_url] to {{LinkText+\*}}
-		contertedText = contertedText.replace(/\[([^\s]*?)\]/g, "{{LinkText+\\*}}($1)");
+		// TODO: Support [#Intelnal link]
+		contertedText = contertedText.replace(/\[http([^\s]*?)\]/g, "{{LinkText+\\*}}(http$1)");
 
 		// convert
 		// "[http://coding.smashingmagazine.com/2012/04/20/decoupling-html-from-css/ Decoupling HTML From CSS]"
