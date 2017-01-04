@@ -22,8 +22,5 @@ I will use this tool to help write (Chinese) [gitbook](https://www.gitbook.com/b
 # Contribute
 * Fork, contribute and send a [pull request](https://help.github.com/articles/fork-a-repo).
 
-# Change log
-* 0.1 - Initial version.
-
 # License
 * MIT
