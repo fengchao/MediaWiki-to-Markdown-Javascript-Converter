@@ -6,7 +6,7 @@
 
 var MediawikiTo2Markdown = {};
 
-;(function(exports) {
+!function(exports) {
 	var cleanUpElement = function cleanUpElement(contertedText){
 		contertedText = contertedText.replace(/^\[\[([^:]*?):([^:]*?)\]\]\n/g, function(matched, str1, str2) {
 			// Keep [[Wikipedia:XXX]]
@@ -145,4 +145,4 @@ var MediawikiTo2Markdown = {};
 	exports.run = convertMediawikiToMarkdown;
 	exports.convertHeader = convertHeader;
 	exports.cnvertHc = convertHc;
-})(MediawikiTo2Markdown);
+}(MediawikiTo2Markdown);
